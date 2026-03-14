@@ -76,6 +76,25 @@ function calcWaitMinutes(int $midArrrvingTime, int $midDepartingTime){
 
 }
 
+function getCityCodes(string $cityName){
+    // returns the lsid and cityID
+    // output: [lsid, cityID]
+    
+
+    $jsonString = file_get_contents('citiesDB.json');
+
+    $data = json_decode($jsonString, false);
+
+
+    foreach ($data as $county => $citiesArray) {
+        $index = array_search($cityName, $citiesArray);
+        if ($index !== false){
+            return [$citiesArray[0], $citiesArray[$index-1]];
+        }
+    }
+    return [-1, -1];
+}
+
 
 
 
@@ -111,14 +130,18 @@ $destCrawler = new Crawler($destPage);
 
 $destTimes = getTimeData($destCrawler);
 
+$cityCodes = getCityCodes($destinationCity);
+print_r($cityCodes); 
+
+
 
 
 // print_r($depTimes);
 // print_r($destTimes);
 
 
-$itineraries = calcIteniaries(keepActiveDays($depTimes, $dayOfTravel), keepActiveDays($destTimes, $dayOfTravel), 10, 60);
-print_r($itineraries);
+// $itineraries = calcIteniaries(keepActiveDays($depTimes, $dayOfTravel), keepActiveDays($destTimes, $dayOfTravel), 10, 60);
+// print_r($itineraries);
 
 
 // print_r($destTimes);
