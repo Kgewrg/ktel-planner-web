@@ -5,7 +5,7 @@ require 'vendor/autoload.php';
 use Goutte\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
-
+use function PHPSTORM_META\type;
 
 function getTimeData($crawler){
     // find the table row that contains the time and day data
@@ -23,6 +23,81 @@ function getTimeData($crawler){
 
 
 
+function keepActiveDays(array $timetable, int $day){
+    # Returns a smaller array that containts only the travel iteniaries that run on  $day
+    # $day = [1, 7]
+
+    $filterredTimetable = [];
+    for ($i = 0; $i < count($timetable); $i++) {
+        if (str_contains($timetable[$i][1], $day)){
+            $filterredTimetable[] = $timetable[$i];
+        }
+    }
+
+    return $filterredTimetable;
+
+
+}
+
+
+function calcIteniaries(array $departureTimes, array $destinationTimes, int $minWaitTime, int  $maxWaitTime){
+    
+    $resultPlans = [];
+    for ($i = 0; $i < count($departureTimes); $i++){
+        $midArrrvingTime = strtotime($departureTimes[$i][2]);
+        for ($j = 0; $j < count($destinationTimes); $j++){
+            $midDepartingTime = strtotime($destinationTimes[$j][0]);
+
+            // dont calculate times that are not feasable 
+            // (mid departure bus leaving before mid arriving bus arriving)
+            if ($midArrrvingTime > $midDepartingTime){ continue;}
+
+
+            // calculate wait minutes
+            $waitMinutes = calcWaitMinutes($midArrrvingTime, $midDepartingTime);
+            
+            if ( $waitMinutes < $minWaitTime || $waitMinutes > $maxWaitTime){ continue;}
+            
+            // echo $departureTimes[$i][2] . " " . $destinationTimes[$j][0] . " " .  $waitMinute . "\n";
+            
+            $resultPlans[] = [$departureTimes[$i][0], $departureTimes[$i][2], $destinationTimes[$j][0], $destinationTimes[$j][2], $waitMinutes];
+        }
+    }
+    return $resultPlans;
+}
+
+
+
+
+function calcWaitMinutes(int $midArrrvingTime, int $midDepartingTime){
+
+    $waitSeconds = $midDepartingTime - $midArrrvingTime; 
+    return $waitSeconds / 60;
+
+}
+
+
+
+
+
+
+
+
+// input: [departure Location, destination Location, minTimeWait, maxTimeWay, dayOfTravel]
+// ["Αξιούπολη", "Σέρρες", 10, 60, 3]
+$departureCity = "Αξιούπολη";
+$destinationCity = "Σέρρες";
+$minWaitTime = 10;
+$maxWaitTime = 60;
+// 1 Δευτέρα, 2 Τρίτη , 3 Τετάρτη, 4 Πέμπτη, 5 Παρασκεύη, 6 Σάββατο, 7 Κυριακή
+$dayOfTravel = 6;
+
+
+// return: arrayof (plan startTime, mid arrivalTime, mid departureTime, plan endtime, mid Wait Time)
+// ...
+// [19.05, 20.05, 21.00, 23.00, 55]
+// ...
+
 // $client = new Client();
 // $crawler = $client->request('GET', 'https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid=21&print=1&from=0&to=57');
 
@@ -38,10 +113,19 @@ $destTimes = getTimeData($destCrawler);
 
 
 
+// print_r($depTimes);
+// print_r($destTimes);
 
-print_r($depTimes);
-print_r($destTimes);
 
+$itineraries = calcIteniaries(keepActiveDays($depTimes, $dayOfTravel), keepActiveDays($destTimes, $dayOfTravel), 10, 60);
+print_r($itineraries);
+
+
+// print_r($destTimes);
+
+// echo '' . $depTimes[3][2] . ' ' . $destTimes[3][2]. "\n"; 
+// echo '' . (calcWaitMinutes($depTimes[3][2], $destTimes[3][2]) . "\n"); 
+// echo '' . (calcWaitMinutes($destTimes[3][2], $depTimes[3][2]) . "\n"); 
 
 
 ?>
