@@ -117,31 +117,44 @@ $dayOfTravel = 6;
 // [19.05, 20.05, 21.00, 23.00, 55]
 // ...
 
-// $client = new Client();
-// $crawler = $client->request('GET', 'https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid=21&print=1&from=0&to=57');
+$client = new Symfony\Component\BrowserKit\HttpBrowser();
 
-$depPage = file_get_contents('departure.html');
-$depCrawler = new Crawler($depPage);
-
+$depCityCodes = getCityCodes($departureCity);
+$depCrawler = $client->request('GET', 'https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid='. $depCityCodes[0] . '&print=1&from='. $depCityCodes[1] .'&to=0');
 $depTimes = getTimeData($depCrawler);
 
-$destPage = file_get_contents('destination.html');
-$destCrawler = new Crawler($destPage);
-
+$destCityCodes = getCityCodes($destinationCity);
+$destCrawler = $client->request('GET', 'https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid='. $destCityCodes[0] . '&print=1&from=0&to='. $destCityCodes[1] .'');
 $destTimes = getTimeData($destCrawler);
 
-$cityCodes = getCityCodes($destinationCity);
-print_r($cityCodes); 
-
-
+$itineraries = calcIteniaries(keepActiveDays($depTimes, $dayOfTravel), keepActiveDays($destTimes, $dayOfTravel), $minWaitTime, $maxWaitTime);
+print_r($itineraries);
 
 
 // print_r($depTimes);
 // print_r($destTimes);
 
 
-// $itineraries = calcIteniaries(keepActiveDays($depTimes, $dayOfTravel), keepActiveDays($destTimes, $dayOfTravel), 10, 60);
-// print_r($itineraries);
+
+
+// $depPage = file_get_contents('departure.html');
+// $depCrawler = new Crawler($depPage);
+// $depTimes = getTimeData($depCrawler);
+
+
+// $destPage = file_get_contents('destination.html');
+// $destCrawler = new Crawler($destPage);
+// $destTimes = getTimeData($destCrawler);
+
+
+// $cityCodes = getCityCodes($destinationCity);
+// print_r($cityCodes); 
+
+
+
+
+
+
 
 
 // print_r($destTimes);
