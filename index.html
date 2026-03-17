@@ -238,7 +238,7 @@
             output.innerHTML = 'Loading...';
 
             try {
-                const response = await fetch('/ktel-planner-web/api/route', {
+                const response = await fetch('/ktel-planner-web/api/route/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime })
