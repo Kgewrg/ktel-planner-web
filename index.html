@@ -226,47 +226,6 @@
 
     <div id="output"></div>
 
-    <script>
-        document.getElementById('searchBtn').addEventListener('click', async () => {
-            const departureCity = document.getElementById('departure').value;
-            const destinationCity = document.getElementById('destination').value;
-            const dayOfTravel = document.getElementById('dayOfTravel').value;
-            const minWaitTime = document.getElementById('minWaitTime').value;
-            const maxWaitTime = document.getElementById('maxWaitTime').value;
-
-            const output = document.getElementById('output');
-            output.innerHTML = 'Loading...';
-
-            try {
-                const response = await fetch('/ktel-planner-web/api/route', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime })
-                });
-                const result = await response.json();
-
-                if (result.error) {
-                    output.innerHTML = result.error;
-                } else if (result.length === 0) {
-                    output.innerHTML = 'Δεν βρέθηκαν διαδρομές';
-                } else {
-                    let html = '<div class="results">';
-                    for (const route of result) {
-                        html += `
-                            <div class="route-card">
-                                <div class="trip">🚌 Αναχώριση: ${route[0]} ➣ Άφιξη: ${route[3]} </div>
-                                <div class="wait">⏳ Χρόνος αναμονής: <span class="wait-time">(${route[4]} λεπτά)</span></div>
-                                <div class="wait"> Περίοδος αναμονής: ${route[1]} με ${route[2]} </div>
-                            </div>
-                        `;
-                    }
-                    html += '</div>';
-                    output.innerHTML = html;
-                }
-            } catch (e) {
-                output.innerHTML = 'Error: ' + e.message;
-            }
-        });
-    </script>
+    <script src="/ktel-planner-web/script.js"></script>
 </body>
 </html>
