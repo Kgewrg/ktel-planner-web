@@ -23,8 +23,6 @@ async function getCityInfo(cityName) {
     return null;
 }
 
-
-
 async function getIteniaryData(html) {
     try {
         console.log(html);
