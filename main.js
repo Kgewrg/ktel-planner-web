@@ -23,7 +23,7 @@ function fetchHtml(url) {
 }
 
 function getCityInfo(cityName) {
-    const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'citiesDB.json'), 'utf-8'));
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, '/ktel-planner-web/citiesDB.json'), 'utf-8'));
 
     for (const county of Object.values(data)) {
         const index = county.indexOf(cityName);
