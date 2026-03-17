@@ -2,10 +2,6 @@
 
 <?php
 require 'vendor/autoload.php';
-use Goutte\Client;
-use Symfony\Component\DomCrawler\Crawler;
-
-use function PHPSTORM_META\type;
 
 function getTimeData($crawler){
     // find the table row that contains the time and day data
