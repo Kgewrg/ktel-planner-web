@@ -87,7 +87,7 @@ function findMatchingRoutes(depActiveRoutes, destActiveRoutes, minWaitTime, maxW
     return results.sort((a, b) => a[4] - b[4]);
 }
 
-app.post('/api/route', async (req, res) => {
+app.post('/ktel-planner-web/api/route', async (req, res) => {
     try {
         const { departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime } = req.body;
 
