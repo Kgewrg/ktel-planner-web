@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KTEL Planner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .row .form-group {
+            flex: 1;
+        }
+        #searchBtn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        #searchBtn:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .route-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #007bff;
+        }
+        .route-card .trip {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .route-card .wait {
+            color: #666;
+            font-size: 14px;
+        }
+        .route-card .wait span {
+            color: #e67e22;
+            font-weight: bold;
+        }
+        .route-card .wait-time {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Σχεδιασμός Διαδρομής</h1>
+    
+    <div class="form-group">
+        <label for="departure">Αναχώρηση:</label>
+        <input type="text" id="departure" list="cities" placeholder="Αναζήτηση πόλης...">
+        <datalist id="cities">
+                <option value="Άμφισσα">Άμφισσα</option>
+                <option value="Άργος">Άργος</option>
+                <option value="Άρτα ">Άρτα </option>
+                <option value="Αγρίνιο">Αγρίνιο</option>
+                <option value="Αδάμ">Αδάμ</option>
+                <option value="Αθήνα (Κηφισός)">Αθήνα (Κηφισός)</option>
+                <option value="Αθήνα (Π.Άρεως)">Αθήνα (Π.Άρεως)</option>
+                <option value="Αθήνα (Πειραιάς)">Αθήνα (Πειραιάς)</option>
+                <option value="Αιγίνιο">Αιγίνιο</option>
+                <option value="Αιδηψός">Αιδηψός</option>
+                <option value="Αλεξανδρούπολη">Αλεξανδρούπολη</option>
+                <option value="Αλιβέρι">Αλιβέρι</option>
+                <option value="Αμαλιάδα">Αμαλιάδα</option>
+                <option value="Αμύνταιο">Αμύνταιο</option>
+                <option value="Ανδραβίδα">Ανδραβίδα</option>
+                <option value="Αξιούπολη">Αξιούπολη</option>
+                <option value="Αριδαία">Αριδαία</option>
+                <option value="Ασπροβάλτα">Ασπροβάλτα</option>
+                <option value="Βάρδα">Βάρδα</option>
+                <option value="Βέροια">Βέροια</option>
+                <option value="Βρασνά">Βρασνά</option>
+                <option value="Βόλος">Βόλος</option>
+                <option value="Γαλαξίδι">Γαλαξίδι</option>
+                <option value="Γαστούνη">Γαστούνη</option>
+                <option value="Γιαννιτσά">Γιαννιτσά</option>
+                <option value="Γουμένισσα">Γουμένισσα</option>
+                <option value="Γρεβενά">Γρεβενά</option>
+                <option value="Δελφοί">Δελφοί</option>
+                <option value="Διδυμότειχο">Διδυμότειχο</option>
+                <option value="Δράμα">Δράμα</option>
+                <option value="Έδεσσα">Έδεσσα</option>
+                <option value="Ελασσόνα">Ελασσόνα</option>
+                <option value="Εύρωπος ">Εύρωπος </option>
+                <option value="Ζάκυνθος">Ζάκυνθος</option>
+                <option value="Ζαγκλιβέρι">Ζαγκλιβέρι</option>
+                <option value="Ηγουμενίτσα">Ηγουμενίτσα</option>
+                <option value="Ηράκλεια">Ηράκλεια</option>
+                <option value="Ηράκλειο">Ηράκλειο</option>
+                <option value="Θήβα">Θήβα</option>
+                <option value="Ισθμός">Ισθμός</option>
+                <option value="Ιτέα">Ιτέα</option>
+                <option value="Ιωάννινα">Ιωάννινα</option>
+                <option value="Κέρκυρα">Κέρκυρα</option>
+                <option value="Καβάλα">Καβάλα</option>
+                <option value="Καλαμάτα">Καλαμάτα</option>
+                <option value="Καλαμπάκα">Καλαμπάκα</option>
+                <option value="Καλαμωτό">Καλαμωτό</option>
+                <option value="Καρδίτσα">Καρδίτσα</option>
+                <option value="Καστοριά">Καστοριά</option>
+                <option value="Κατερίνη">Κατερίνη</option>
+                <option value="Κιάτο">Κιάτο</option>
+                <option value="Κιλκίς">Κιλκίς</option>
+                <option value="Κοζάνη">Κοζάνη</option>
+                <option value="Κολινδρός">Κολινδρός</option>
+                <option value="Κομοτηνή">Κομοτηνή</option>
+                <option value="Κορμίστα, Παγγαίο">Κορμίστα, Παγγαίο</option>
+                <option value="Κρύα Βρύση">Κρύα Βρύση</option>
+                <option value="Κόρινθος">Κόρινθος</option>
+                <option value="Λάρισα">Λάρισα</option>
+                <option value="Λήμνος">Λήμνος</option>
+                <option value="Λαμία">Λαμία</option>
+                <option value="Λεπτοκαρυά">Λεπτοκαρυά</option>
+                <option value="Λευκάδα">Λευκάδα</option>
+                <option value="Λεχαινά">Λεχαινά</option>
+                <option value="Λιτόχωρο">Λιτόχωρο</option>
+                <option value="Μακρύγιαλος">Μακρύγιαλος</option>
+                <option value="Μαυροθάλασσα">Μαυροθάλασσα</option>
+                <option value="Μεθώνη">Μεθώνη</option>
+                <option value="Μεσολόγγι">Μεσολόγγι</option>
+                <option value="Μυτιλήνη">Μυτιλήνη</option>
+                <option value="Ν.Πόρροι">Ν.Πόρροι</option>
+                <option value="Νάουσα">Νάουσα</option>
+                <option value="Νέα Απολλωνία">Νέα Απολλωνία</option>
+                <option value="Νέα Μανωλάδα">Νέα Μανωλάδα</option>
+                <option value="Ναύπλιο">Ναύπλιο</option>
+                <option value="Νιγρίτα">Νιγρίτα</option>
+                <option value="Ξάνθη">Ξάνθη</option>
+                <option value="Ολυμπιάδα">Ολυμπιάδα</option>
+                <option value="Ορεστιάδα">Ορεστιάδα</option>
+                <option value="Πάργα">Πάργα</option>
+                <option value="Πάτρα">Πάτρα</option>
+                <option value="Παλιά Πέλλα">Παλιά Πέλλα</option>
+                <option value="Πετροκέρασα">Πετροκέρασα</option>
+                <option value="Πλαταμώνας">Πλαταμώνας</option>
+                <option value="Πολύκαστρο">Πολύκαστρο</option>
+                <option value="Πρέβεζα">Πρέβεζα</option>
+                <option value="Προβατώνας">Προβατώνας</option>
+                <option value="Πτολεμαΐδα">Πτολεμαΐδα</option>
+                <option value="Πύργος">Πύργος</option>
+                <option value="Ρεντίνα">Ρεντίνα</option>
+                <option value="Ροδολίβος">Ροδολίβος</option>
+                <option value="Σέρρες">Σέρρες</option>
+                <option value="Σαββάλια">Σαββάλια</option>
+                <option value="Σιδηρόκαστρο">Σιδηρόκαστρο</option>
+                <option value="Σκύδρα">Σκύδρα</option>
+                <option value="Σουφλί">Σουφλί</option>
+                <option value="Σπάρτη">Σπάρτη</option>
+                <option value="Σταυρός">Σταυρός</option>
+                <option value="Τούμπα">Τούμπα</option>
+                <option value="Τρίκαλα">Τρίκαλα</option>
+                <option value="Τρίπολη">Τρίπολη</option>
+                <option value="Φέρες">Φέρες</option>
+                <option value="Φιλιππιάδα">Φιλιππιάδα</option>
+                <option value="Φλώρινα">Φλώρινα</option>
+                <option value="Χαλκίδα">Χαλκίδα</option>
+                <option value="Χανι">Χανι</option>
+        </datalist>
+    </div>
+
+    <div class="form-group">
+        <label for="destination">Προορισμός:</label>
+        <input type="text" id="destination" list="cities" placeholder="Αναζήτηση πόλης...">
+    </div>
+
+    <div class="row">
+    <div class="form-group">
+        <label for="dayOfTravel">Ημέρα:</label>
+        <select id="dayOfTravel">
+            <option value="1">Δευτέρα</option>
+            <option value="2">Τρίτη</option>
+            <option value="3">Τετάρτη</option>
+            <option value="4">Πέμπτη</option>
+            <option value="5">Παρασκευή</option>
+            <option value="6">Σάββατο</option>
+            <option value="7">Κυριακή</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="minWaitTime">Ελάχιστος χρόνος αναμονής (λεπτά):</label>
+        <input type="number" id="minWaitTime" value="10">
+    </div>
+
+    <div class="form-group">
+        <label for="maxWaitTime">Μέγιστος χρόνος αναμονής (λεπτά):</label>
+        <input type="number" id="maxWaitTime" value="60">
+    </div>
+    </div>
+
+    <button id="searchBtn">Αναζήτηση</button>
+
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('searchBtn').addEventListener('click', async () => {
+            const departureCity = document.getElementById('departure').value;
+            const destinationCity = document.getElementById('destination').value;
+            const dayOfTravel = document.getElementById('dayOfTravel').value;
+            const minWaitTime = document.getElementById('minWaitTime').value;
+            const maxWaitTime = document.getElementById('maxWaitTime').value;
+
+            const output = document.getElementById('output');
+            output.innerHTML = 'Loading...';
+
+            try {
+                const response = await fetch('/api/route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime })
+                });
+                const result = await response.json();
+
+                if (result.error) {
+                    output.innerHTML = result.error;
+                } else if (result.length === 0) {
+                    output.innerHTML = 'Δεν βρέθηκαν διαδρομές';
+                } else {
+                    let html = '<div class="results">';
+                    for (const route of result) {
+                        html += `
+                            <div class="route-card">
+                                <div class="trip">🚌 Αναχώριση: ${route[0]} ➣ Άφιξη: ${route[3]} </div>
+                                <div class="wait">⏳ Χρόνος αναμονής: <span class="wait-time">(${route[4]} λεπτά)</span></div>
+                                <div class="wait"> Περίοδος αναμονής: ${route[1]} με ${route[2]} </div>
+                            </div>
+                        `;
+                    }
+                    html += '</div>';
+                    output.innerHTML = html;
+                }
+            } catch (e) {
+                output.innerHTML = 'Error: ' + e.message;
+            }
+        });
+    </script>
+</body>
+</html>

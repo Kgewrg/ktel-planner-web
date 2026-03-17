@@ -1,19 +1,30 @@
-// const fs = require('fs');
-// const path = require('path');
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { JSDOM } from 'jsdom';
 import { get } from 'https';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-async function getCityInfo(cityName) {
+const app = express();
+app.use(express.json());
+app.use(express.static('.'));
 
-    const response = await fetch('./citiesDB.json'); 
-    
-    const data = await response.json();
+function fetchHtml(url) {
+    return new Promise((resolve, reject) => {
+        get(url, res => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => resolve(data));
+        }).on('error', reject);
+    });
+}
 
-    // const citiesData = JSON.parse(data, 'utf-8');
+function getCityInfo(cityName) {
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'citiesDB.json'), 'utf-8'));
 
-
-    // const citiesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'citiesDB.json'), 'utf-8'));
     for (const county of Object.values(data)) {
         const index = county.indexOf(cityName);
         if (index !== -1) {
@@ -25,9 +36,7 @@ async function getCityInfo(cityName) {
 
 async function getIteniaryData(html) {
     try {
-        console.log(html);
-        const depHtml = await fetchHtml(html);
-        const dom = new JSDOM(depHtml);
+        const dom = new JSDOM(html);
         const document = dom.window.document;
         
         const routeRows = document.querySelectorAll('tr.routerow');
@@ -45,7 +54,6 @@ async function getIteniaryData(html) {
             routes.push(transformed);
         });
         
-        // console.log(routes);
         return routes;
     } catch (error) {
         console.error('Error loading or scraping departures:', error);
@@ -55,7 +63,6 @@ async function getIteniaryData(html) {
 function filterByDayOfTravel(routes, dayOfTravel) {
     return routes.filter(route => route[1].includes(dayOfTravel.toString()));
 }
-
 
 function timeToMinutes(time) {
     const [hours, minutes] = time.split(':').map(Number);
@@ -77,43 +84,45 @@ function findMatchingRoutes(depActiveRoutes, destActiveRoutes, minWaitTime, maxW
             }
         }
     }
-    return results;
+    return results.sort((a, b) => a[4] - b[4]);
 }
 
-function fetchHtml(url) {
-    return new Promise((resolve, reject) => {
-        get(url, res => {
-            let data = '';
-            res.on('data', chunk => data += chunk);
-            res.on('end', () => resolve(data));
-        }).on('error', reject);
-    });
-}
+app.post('/api/route', async (req, res) => {
+    try {
+        const { departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime } = req.body;
 
+        const depCityCodes = await getCityInfo(departureCity);
+        if (!depCityCodes) {
+            return res.json({ error: 'Departure city not found' });
+        }
 
+        const destCityCodes = await getCityInfo(destinationCity);
+        if (!destCityCodes) {
+            return res.json({ error: 'Destination city not found' });
+        }
 
-console.log
-// input: [departure Location, destination Location, minTimeWait, maxTimeWay, dayOfTravel]
-// ["Αξιούπολη", "Σέρρες", 10, 60, 3]
-const departureCity = "Αξιούπολη";
-const destinationCity = "Σέρρες";
-const minWaitTime = 10;
-const maxWaitTime = 60;
-// 1 Δευτέρα, 2 Τρίτη , 3 Τετάρτη, 4 Πέμπτη, 5 Παρασκεύη, 6 Σάββατο, 7 Κυριακή
-const dayOfTravel = 6;
+        const depHtml = await fetchHtml(`https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid=${depCityCodes[0]}&print=1&from=${depCityCodes[1]}&to=0`);
+        const depAllRoutes = await getIteniaryData(depHtml);
 
-console.log("\n START \n");
-const depCityCodes = await getCityInfo(departureCity);
-console.log(depCityCodes);
-const depAllRoutes = await getIteniaryData(`https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid=${depCityCodes[0]}&print=1&from=${depCityCodes[1]}&to=0`);
+        const destHtml = await fetchHtml(`https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid=${destCityCodes[0]}&print=1&from=0&to=${destCityCodes[1]}`);
+        const destAllRoutes = await getIteniaryData(destHtml);
 
-const destCityCodes = await getCityInfo(destinationCity);
-const destAllRoutes = await getIteniaryData(`https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid=${depCityCodes[0]}&print=1&from=0&to=${depCityCodes[1]}`);
+        const result = findMatchingRoutes(
+            filterByDayOfTravel(depAllRoutes, parseInt(dayOfTravel)),
+            filterByDayOfTravel(destAllRoutes, parseInt(dayOfTravel)),
+            parseInt(minWaitTime),
+            parseInt(maxWaitTime)
+        );
+        
 
+        
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.json({ error: 'An error occurred' });
+    }
+});
 
-
-console.log(findMatchingRoutes(filterByDayOfTravel(depAllRoutes, dayOfTravel), filterByDayOfTravel(destAllRoutes, dayOfTravel), minWaitTime, maxWaitTime));
-// (async () => {
-// })();
-
-
+app.listen(3000, () => {
+    console.log('Server running at http://localhost:3000');
+});
