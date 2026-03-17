@@ -1,4 +1,4 @@
-const citiesResponse = await fetch('/ktel-planner-web/citiesDB.json');
+const citiesResponse = await fetch('ktel-planner-web/citiesDB.json');
 const citiesData = await citiesResponse.json();
 
 function getCityInfo(cityName) {
