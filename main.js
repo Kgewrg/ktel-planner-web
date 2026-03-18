@@ -23,7 +23,7 @@ function fetchHtml(url) {
 }
 
 function getCityInfo(cityName) {
-    const data = JSON.parse(fs.readFileSync(path.join(__dirname, '/ktel-planner-web/citiesDB.json'), 'utf-8'));
+    const data = JSON.parse(fs.readFileSync(path.join(__dirname, 'citiesDB.json'), 'utf-8'));
 
     for (const county of Object.values(data)) {
         const index = county.indexOf(cityName);
@@ -87,18 +87,18 @@ function findMatchingRoutes(depActiveRoutes, destActiveRoutes, minWaitTime, maxW
     return results.sort((a, b) => a[4] - b[4]);
 }
 
-app.post('/ktel-planner-web/api/route', async (req, res) => {
+app.post('/api/route', async (req, res) => {
     try {
         const { departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime } = req.body;
 
-        const depCityCodes = await getCityInfo(departureCity);
+        const depCityCodes = getCityInfo(departureCity);
         if (!depCityCodes) {
-            return res.json({ error: 'Departure city not found' });
+            return res.json({ error: 'Δεν βρέθηκε η πόλη αναχώρησης' });
         }
 
-        const destCityCodes = await getCityInfo(destinationCity);
+        const destCityCodes = getCityInfo(destinationCity);
         if (!destCityCodes) {
-            return res.json({ error: 'Destination city not found' });
+            return res.json({ error: 'Δεν βρέθηκε η πόλη προορισμού' });
         }
 
         const depHtml = await fetchHtml(`https://ktelmacedonia.gr/gr/routes/ajaxroutes/modonly=1&lsid=${depCityCodes[0]}&print=1&from=${depCityCodes[1]}&to=0`);
@@ -113,9 +113,7 @@ app.post('/ktel-planner-web/api/route', async (req, res) => {
             parseInt(minWaitTime),
             parseInt(maxWaitTime)
         );
-        
 
-        
         res.json(result);
     } catch (error) {
         console.error(error);
