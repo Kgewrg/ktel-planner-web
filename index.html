@@ -64,6 +64,45 @@
             border-color: #667eea;
             box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
         }
+        .searchable-select {
+            position: relative;
+        }
+        .searchable-select input {
+            cursor: pointer;
+        }
+        .searchable-select .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #667eea;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .searchable-select .dropdown.show {
+            display: block;
+        }
+        .searchable-select .dropdown div {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .searchable-select .dropdown div:hover {
+            background: #f0f4ff;
+        }
+        .searchable-select .dropdown div.highlighted {
+            background: #e0e8ff;
+        }
+        .searchable-select .dropdown div.no-match {
+            color: #999;
+            cursor: default;
+        }
         .row {
             display: flex;
             gap: 15px;
@@ -147,120 +186,18 @@
         <div class="form-container">
             <div class="form-group">
                 <label for="departure">📍 Πόλη Αναχώρησης</label>
-                <input type="text" id="departure" list="cities" placeholder="Επιλέξτε πόλη...">
-                <datalist id="cities">
-                    <option value="Άμφισσα">
-                    <option value="Άργος">
-                    <option value="Άρτα ">
-                    <option value="Αγρίνιο">
-                    <option value="Αδάμ">
-                    <option value="Αθήνα (Κηφισός)">
-                    <option value="Αθήνα (Π.Άρεως)">
-                    <option value="Αθήνα (Πειραιάς)">
-                    <option value="Αιγίνιο">
-                    <option value="Αιδηψός">
-                    <option value="Αλεξανδρούπολη">
-                    <option value="Αλιβέρι">
-                    <option value="Αμαλιάδα">
-                    <option value="Αμύνταιο">
-                    <option value="Ανδραβίδα">
-                    <option value="Αξιούπολη">
-                    <option value="Αριδαία">
-                    <option value="Ασπροβάλτα">
-                    <option value="Βάρδα">
-                    <option value="Βέροια">
-                    <option value="Βρασνά">
-                    <option value="Βόλος">
-                    <option value="Γαλαξίδι">
-                    <option value="Γαστούνη">
-                    <option value="Γιαννιτσά">
-                    <option value="Γουμένισσα">
-                    <option value="Γρεβενά">
-                    <option value="Δελφοί">
-                    <option value="Διδυμότειχο">
-                    <option value="Δράμα">
-                    <option value="Έδεσσα">
-                    <option value="Ελασσόνα">
-                    <option value="Εύρωπος ">
-                    <option value="Ζάκυνθος">
-                    <option value="Ζαγκλιβέρι">
-                    <option value="Ηγουμενίτσα">
-                    <option value="Ηράκλεια">
-                    <option value="Ηράκλειο">
-                    <option value="Θήβα">
-                    <option value="Ισθμός">
-                    <option value="Ιτέα">
-                    <option value="Ιωάννινα">
-                    <option value="Κέρκυρα">
-                    <option value="Καβάλα">
-                    <option value="Καλαμάτα">
-                    <option value="Καλαμπάκα">
-                    <option value="Καλαμωτό">
-                    <option value="Καρδίτσα">
-                    <option value="Καστοριά">
-                    <option value="Κατερίνη">
-                    <option value="Κιάτο">
-                    <option value="Κιλκίς">
-                    <option value="Κοζάνη">
-                    <option value="Κολινδρός">
-                    <option value="Κομοτηνή">
-                    <option value="Κορμίστα, Παγγαίο">
-                    <option value="Κρύα Βρύση">
-                    <option value="Κόρινθος">
-                    <option value="Λάρισα">
-                    <option value="Λήμνος">
-                    <option value="Λαμία">
-                    <option value="Λεπτοκαρυά">
-                    <option value="Λευκάδα">
-                    <option value="Λεχαινά">
-                    <option value="Λιτόχωρο">
-                    <option value="Μακρύγιαλος">
-                    <option value="Μαυροθάλασσα">
-                    <option value="Μεθώνη">
-                    <option value="Μεσολόγγι">
-                    <option value="Μυτιλήνη">
-                    <option value="Ν.Πόρροι">
-                    <option value="Νάουσα">
-                    <option value="Νέα Απολλωνία">
-                    <option value="Νέα Μανωλάδα">
-                    <option value="Ναύπλιο">
-                    <option value="Νιγρίτα">
-                    <option value="Ξάνθη">
-                    <option value="Ολυμπιάδα">
-                    <option value="Ορεστιάδα">
-                    <option value="Πάργα">
-                    <option value="Πάτρα">
-                    <option value="Παλιά Πέλλα">
-                    <option value="Πετροκέρασα">
-                    <option value="Πλαταμώνας">
-                    <option value="Πολύκαστρο">
-                    <option value="Πρέβεζα">
-                    <option value="Προβατώνας">
-                    <option value="Πτολεμαΐδα">
-                    <option value="Πύργος">
-                    <option value="Ρεντίνα">
-                    <option value="Ροδολίβος">
-                    <option value="Σέρρες">
-                    <option value="Σαββάλια">
-                    <option value="Σιδηρόκαστρο">
-                    <option value="Σκύδρα">
-                    <option value="Σουφλί">
-                    <option value="Σπάρτη">
-                    <option value="Σταυρός">
-                    <option value="Τούμπα">
-                    <option value="Τρίκαλα">
-                    <option value="Τρίπολη">
-                    <option value="Φέρες">
-                    <option value="Φιλιππιάδα">
-                    <option value="Φλώρινα">
-                    <option value="Χαλκίδα">
-                    <option value="Χανι">
-                </datalist>
+                <div class="searchable-select" id="departureSelect">
+                    <input type="text" id="departure" placeholder="Επιλέξτε πόλη...">
+                    <div class="dropdown"></div>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="destination">📍 Πόλη Προορισμού</label>
-                <input type="text" id="destination" list="cities" placeholder="Επιλέξτε πόλη...">
+                <div class="searchable-select" id="destinationSelect">
+                    <input type="text" id="destination" placeholder="Επιλέξτε πόλη...">
+                    <div class="dropdown"></div>
+                </div>
             </div>
 
             <div class="row">
@@ -295,6 +232,66 @@
     </div>
 
     <script>
+        const cities = [
+            "Άμφισσα", "Άργος", "Άρτα", "Αγρίνιο", "Αδάμ", "Αθήνα (Κηφισός)", "Αθήνα (Π.Άρεως)", "Αθήνα (Πειραιάς)",
+            "Αιγίνιο", "Αιδηψός", "Αλεξανδρούπολη", "Αλιβέρι", "Αμαλιάδα", "Αμύνταιο", "Ανδραβίδα", "Αξιούπολη",
+            "Αριδαία", "Ασπροβάλτα", "Βάρδα", "Βέροια", "Βρασνά", "Βόλος", "Γαλαξίδι", "Γαστούνη", "Γιαννιτσά",
+            "Γουμένισσα", "Γρεβενά", "Δελφοί", "Διδυμότειχο", "Δράμα", "Έδεσσα", "Ελασσόνα", "Εύρωπος", "Ζάκυνθος",
+            "Ζαγκλιβέρι", "Ηγουμενίτσα", "Ηράκλεια", "Ηράκλειο", "Θήβα", "Ισθμός", "Ιτέα", "Ιωάννινα", "Κέρκυρα",
+            "Καβάλα", "Καλαμάτα", "Καλαμπάκα", "Καλαμωτό", "Καρδίτσα", "Καστοριά", "Κατερίνη", "Κιάτο", "Κιλκίς",
+            "Κοζάνη", "Κολινδρός", "Κομοτηνή", "Κορμίστα, Παγγαίο", "Κρύα Βρύση", "Κόρινθος", "Λάρισα", "Λήμνος",
+            "Λαμία", "Λεπτοκαρυά", "Λευκάδα", "Λεχαινά", "Λιτόχωρο", "Μακρύγιαλος", "Μαυροθάλασσα", "Μεθώνη",
+            "Μεσολόγγι", "Μυτιλήνη", "Ν.Πόρροι", "Νάουσα", "Νέα Απολλωνία", "Νέα Μανωλάδα", "Ναύπλιο", "Νιγρίτα",
+            "Ξάνθη", "Ολυμπιάδα", "Ορεστιάδα", "Πάργα", "Πάτρα", "Παλιά Πέλλα", "Πετροκέρασα", "Πλαταμώνας",
+            "Πολύκαστρο", "Πρέβεζα", "Προβατώνας", "Πτολεμαΐδα", "Πύργος", "Ρεντίνα", "Ροδολίβος", "Σέρρες",
+            "Σαββάλια", "Σιδηρόκαστρο", "Σκύδρα", "Σουφλί", "Σπάρτη", "Σταυρός", "Τούμπα", "Τρίκαλα", "Τρίπολη",
+            "Φέρες", "Φιλιππιάδα", "Φλώρινα", "Χαλκίδα", "Χανιά"
+        ];
+
+        function initSearchableSelect(containerId, inputId) {
+            const container = document.getElementById(containerId);
+            const input = document.getElementById(inputId);
+            const dropdown = container.querySelector('.dropdown');
+
+            function renderDropdown(filter = '') {
+                dropdown.innerHTML = '';
+                const filtered = cities.filter(c => c.toLowerCase().includes(filter.toLowerCase()));
+                
+                if (filtered.length === 0) {
+                    dropdown.innerHTML = '<div class="no-match">Δεν βρέθηκαν αποτελέσματα</div>';
+                } else {
+                    filtered.forEach(city => {
+                        const div = document.createElement('div');
+                        div.textContent = city;
+                        div.addEventListener('click', () => {
+                            input.value = city;
+                            dropdown.classList.remove('show');
+                        });
+                        dropdown.appendChild(div);
+                    });
+                }
+            }
+
+            input.addEventListener('click', () => {
+                renderDropdown();
+                dropdown.classList.add('show');
+            });
+
+            input.addEventListener('input', () => {
+                renderDropdown(input.value);
+                dropdown.classList.add('show');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!container.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        }
+
+        initSearchableSelect('departureSelect', 'departure');
+        initSearchableSelect('destinationSelect', 'destination');
+
         document.getElementById('searchBtn').addEventListener('click', async () => {
             const departureCity = document.getElementById('departure').value;
             const destinationCity = document.getElementById('destination').value;
