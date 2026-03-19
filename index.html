@@ -12,31 +12,33 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #281E18 0%, #572D0C 100%);
             min-height: 100vh;
             padding: 40px 20px;
         }
         .container {
             max-width: 700px;
             margin: 0 auto;
-            background: white;
+            background: #fff5f0;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             overflow: hidden;
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #f9b49e 0%, #b45d41 100%);
+            color: #221c15;
             padding: 30px;
             text-align: center;
         }
         .header h1 {
             font-size: 28px;
             font-weight: 600;
+            color: #221c15;
         }
         .header p {
             margin-top: 8px;
-            opacity: 0.9;
+            opacity: 0.8;
+            color: #221c15;
         }
         .form-container {
             padding: 30px;
@@ -48,21 +50,22 @@
             display: block;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #333;
+            color: #221c15;
             font-size: 14px;
         }
         input, select {
             width: 100%;
             padding: 14px 16px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #e0d4cf;
             border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s ease;
+            background: white;
         }
         input:focus, select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+            border-color: #b45d41;
+            box-shadow: 0 0 0 4px rgba(180,93,65,0.2);
         }
         .searchable-select {
             position: relative;
@@ -76,7 +79,7 @@
             left: 0;
             right: 0;
             background: white;
-            border: 2px solid #667eea;
+            border: 2px solid #b45d41;
             border-top: none;
             border-radius: 0 0 10px 10px;
             max-height: 250px;
@@ -92,12 +95,13 @@
             padding: 12px 16px;
             cursor: pointer;
             transition: background 0.2s;
+            color: #221c15;
         }
         .searchable-select .dropdown div:hover {
-            background: #f0f4ff;
+            background: #f9e0db;
         }
         .searchable-select .dropdown div.highlighted {
-            background: #e0e8ff;
+            background: #f9d0c7;
         }
         .searchable-select .dropdown div.no-match {
             color: #999;
@@ -107,27 +111,31 @@
             display: flex;
             gap: 15px;
         }
+        .row .form-title {
+            text-align: center;
+            flex: 1;
+        }
         .row .form-group {
             flex: 1;
         }
         #searchBtn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #f9b49e 0%, #b45d41 100%);
+            color: #221c15;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             font-size: 18px;
             font-weight: 600;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.2s ease;
         }
         #searchBtn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+            box-shadow: 0 10px 30px rgba(180,93,65,0.4);
         }
         #searchBtn:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
         #output {
             padding: 0 30px 30px;
@@ -138,41 +146,42 @@
             gap: 15px;
         }
         .route-card {
-            background: #f8f9fa;
+            background: white;
             border-radius: 15px;
             padding: 20px;
-            border: 1px solid #e0e0e0;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 2px solid #e0d4cf;
+            transition: all 0.2s ease;
         }
         .route-card:hover {
             transform: translateX(5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-color: #b45d41;
+            box-shadow: 0 5px 20px rgba(180,93,65,0.2);
         }
         .route-card .trip {
             font-weight: 600;
             font-size: 16px;
-            color: #333;
+            color: #221c15;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         .route-card .wait {
-            color: #666;
+            color: #221c15;
             font-size: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .route-card .wait-time {
-            color: #667eea;
-            font-weight: 700;
+            color: #b45d41;
+            font-weight: 800;
             font-size: 16px;
         }
         .no-results {
             text-align: center;
             padding: 40px;
-            color: #666;
+            color: #221c15;
             font-size: 18px;
         }
     </style>
@@ -181,11 +190,12 @@
     <div class="container">
         <div class="header">
             <h1>KTEL Planner</h1>
+            <p><b>Μια εφαρμογή που βρίσκει τα δρομολόγια με τον λιγότερο χρόνο αναμονής που έχουν ενδιάμεση στάση τον σταθμό ΚΤΕΛ Μακεδόνιας.</b></p>
         </div>
         
         <div class="form-container">
             <div class="form-group">
-                <label for="departure">📍 Πόλη Αναχώρησης</label>
+                <label for="departure">Πόλη Αναχώρησης</label>
                 <div class="searchable-select" id="departureSelect">
                     <input type="text" id="departure" placeholder="Επιλέξτε πόλη...">
                     <div class="dropdown"></div>
@@ -193,7 +203,7 @@
             </div>
 
             <div class="form-group">
-                <label for="destination">📍 Πόλη Προορισμού</label>
+                <label for="destination">Πόλη Προορισμού</label>
                 <div class="searchable-select" id="destinationSelect">
                     <input type="text" id="destination" placeholder="Επιλέξτε πόλη...">
                     <div class="dropdown"></div>
@@ -201,8 +211,14 @@
             </div>
 
             <div class="row">
+                <div class="form-title"> <label for="dayOfTravel">Ημέρα Ταξιδιού</label> </div>
+                <div class="form-title"> <label for="minWaitTime">Ελάχιστη αναμονή (λεπτά)</label> </div>
+                <div class="form-title"> <label for="maxWaitTime">Μέγιστη αναμονή (λεπτά)</label> </div>
+            </div>
+
+
+            <div class="row">
                 <div class="form-group">
-                    <label for="dayOfTravel">📅 Ημέρα</label>
                     <select id="dayOfTravel">
                         <option value="1">Δευτέρα</option>
                         <option value="2">Τρίτη</option>
@@ -215,17 +231,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="minWaitTime">Ελάχιστη αναμονή (λεπτά)</label>
+                    
                     <input type="number" id="minWaitTime" value="10">
                 </div>
 
                 <div class="form-group">
-                    <label for="maxWaitTime">Μέγιστη αναμονή (λεπτά)</label>
+                    
                     <input type="number" id="maxWaitTime" value="60">
                 </div>
             </div>
 
-            <button id="searchBtn">🔍 Αναζήτηση Διαδρομών</button>
+            <button id="searchBtn">Αναζήτηση</button>
         </div>
         
         <div id="output"></div>
@@ -296,8 +312,32 @@
             const departureCity = document.getElementById('departure').value;
             const destinationCity = document.getElementById('destination').value;
             const dayOfTravel = document.getElementById('dayOfTravel').value;
-            const minWaitTime = document.getElementById('minWaitTime').value;
-            const maxWaitTime = document.getElementById('maxWaitTime').value;
+            const minWaitTime = parseInt(document.getElementById('minWaitTime').value);
+            const maxWaitTime = parseInt(document.getElementById('maxWaitTime').value);
+
+            if (departureCity==""){
+                const output = document.getElementById('output');
+                output.innerHTML = '<div class="no-results">Το πεδίο "πόλη αναχώρισης" είναι κενό</div>';
+                return;
+            }
+
+            if (destinationCity==""){
+                const output = document.getElementById('output');
+                output.innerHTML = '<div class="no-results">Το πεδίο "πόλη προορισμού" είναι κενό</div>';
+                return;
+            }
+
+            if (maxWaitTime <= minWaitTime) {
+                const output = document.getElementById('output');
+                output.innerHTML = '<div class="no-results">Ο μέγιστος χρόνος αναμονής πρέπει να είναι μεγαλύτερος από τον ελάχιστο</div>';
+                return;
+            }
+
+            if (departureCity == destinationCity){
+                const output = document.getElementById('output');
+                output.innerHTML = '<div class="no-results">Η πόλη αναχώρισης δεν μπορεί να είναι η ίδια με την πόλη προορισμού</div>';
+                return;
+            }
 
             const output = document.getElementById('output');
             output.innerHTML = '<div class="no-results">⏳ Φόρτωση...</div>';
@@ -311,16 +351,17 @@
                 const result = await response.json();
 
                 if (result.error) {
-                    output.innerHTML = `<div class="no-results">⚠️ ${result.error}</div>`;
+                    output.innerHTML = `<div class="no-results">${result.error}</div>`;
                 } else if (result.length === 0) {
-                    output.innerHTML = '<div class="no-results">😕 Δεν βρέθηκαν διαδρομές</div>';
+                    output.innerHTML = '<div class="no-results">Δεν βρέθηκαν διαδρομές</div>';
                 } else {
                     let html = '<div class="results">';
+                    html += '<div class="no-results">Τα δρομολόγια πρέπει να επιβεβαιώνονται απο το ΚΤΕΛ ΜΑΚΕΔΟΝΙΑ ή/και τα τοπικά πρακτορία.</div>';
                     for (const route of result) {
                         html += `
                             <div class="route-card">
-                                <div class="trip">🚌 Αναχώριση ${route[0]} ➝ Άφιξη: ${route[3]} </div>
-                                <div class="wait">⏳ Χρόνος αναμονής: <span class="wait-time"> ${route[4]} λεπτά</span></div> 
+                                <div class="trip">Αναχώριση: ${route[0]} ➝ Άφιξη: ${route[3]} </div>
+                                <div class="wait">Χρόνος αναμονής: <span class="wait-time"> ${route[4]} λεπτά</span></div> 
                                 <div class="wait"> Περίοδος αναμονής: απο ${route[1]} εως ${route[2]}</div>
                             </div>
                         `;
@@ -329,7 +370,7 @@
                     output.innerHTML = html;
                 }
             } catch (e) {
-                output.innerHTML = `<div class="no-results">❌ Σφάλμα: ${e.message}</div>`;
+                output.innerHTML = `<div class="no-results">Σφάλμα: ${e.message}</div>`;
             }
         });
     </script>
