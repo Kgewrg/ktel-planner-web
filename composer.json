@@ -1,6 +1,0 @@
-{
-    "require": {
-        "fabpot/goutte": "^4.0",
-        "php": ">= 8.5.4"
-    }
-}
