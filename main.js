@@ -92,6 +92,13 @@ function findMatchingRoutes(depActiveRoutes, destActiveRoutes, minWaitTime, maxW
 app.post('/api/route', async (req, res) => {
     try {
         const { departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime } = req.body;
+        
+        console.log(req.originalUrl);
+
+        if (departureCity == "" || destinationCity=="" || minWaitTime < 0 || maxWaitTime < 0 || isNaN(minWaitTime) || isNaN(maxWaitTime) || maxWaitTime <= minWaitTime || departureCity == destinationCity) {
+            return res.json({ error: 'Data Error' });
+        };
+
 
         const depCityCodes = getCityInfo(departureCity);
         if (!depCityCodes) {

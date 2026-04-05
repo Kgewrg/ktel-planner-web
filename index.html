@@ -317,39 +317,48 @@
             const minWaitTime = parseInt(document.getElementById('minWaitTime').value);
             const maxWaitTime = parseInt(document.getElementById('maxWaitTime').value);
 
+            const output = document.getElementById('output');
+
             if (departureCity==""){
-                const output = document.getElementById('output');
                 output.innerHTML = '<div class="no-results">Το πεδίο "πόλη αναχώρισης" είναι κενό</div>';
                 return;
             }
 
             if (destinationCity==""){
-                const output = document.getElementById('output');
                 output.innerHTML = '<div class="no-results">Το πεδίο "πόλη προορισμού" είναι κενό</div>';
                 return;
             }
 
+            if (minWaitTime < 0 || maxWaitTime < 0) {
+                output.innerHTML = '<div class="no-results">Ο χρόνος αναμονής δεν μπορεί να είναι μικρότερος απο το 0</div>';
+                return;
+            }
+
+            if (isNaN(minWaitTime) || isNaN(maxWaitTime)){
+                output.innerHTML = '<div class="no-results">Εσφαλμένη τιμή για χρόνο αναμονής</div>';
+                return;
+            }
+
             if (maxWaitTime <= minWaitTime) {
-                const output = document.getElementById('output');
                 output.innerHTML = '<div class="no-results">Ο μέγιστος χρόνος αναμονής πρέπει να είναι μεγαλύτερος από τον ελάχιστο</div>';
                 return;
             }
 
             if (departureCity == destinationCity){
-                const output = document.getElementById('output');
                 output.innerHTML = '<div class="no-results">Η πόλη αναχώρισης δεν μπορεί να είναι η ίδια με την πόλη προορισμού</div>';
                 return;
             }
 
-            const output = document.getElementById('output');
-            output.innerHTML = '<div class="no-results">⏳ Φόρτωση...</div>';
 
+            
+            output.innerHTML = '<div class="no-results">⏳ Φόρτωση...</div>';
             try {
                 const response = await fetch('/api/route', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime })
                 });
+                
                 const result = await response.json();
 
                 if (result.error) {
