@@ -4,6 +4,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { JSDOM } from 'jsdom';
 import { get } from 'https';
+import rateLimit from 'express-rate-limit';
+
+
+const limiter = rateLimit({
+  windowMs: 1000, // 1 second
+  max: 1,  // once per second
+  message: "Please try again",
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +19,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json());
 app.use(express.static('.'));
+app.use(limiter);
+
+
+
 
 const port = process.env.PORT || 3000;
 
@@ -93,7 +105,6 @@ app.post('/api/route', async (req, res) => {
     try {
         const { departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime } = req.body;
         
-        console.log(req.originalUrl);
 
         if (departureCity == "" || destinationCity=="" || minWaitTime < 0 || maxWaitTime < 0 || isNaN(minWaitTime) || isNaN(maxWaitTime) || maxWaitTime <= minWaitTime || departureCity == destinationCity) {
             return res.json({ error: 'Data Error' });
