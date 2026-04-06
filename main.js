@@ -20,6 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static('.'));
 app.use(limiter);
+app.set("trust proxy", true);
 
 
 
@@ -105,6 +106,11 @@ app.post('/api/route', async (req, res) => {
     try {
         const { departureCity, destinationCity, dayOfTravel, minWaitTime, maxWaitTime } = req.body;
         
+        console.log(req.get("host"));
+        console.log(req.originalUrl);
+
+        var requestedUrl = req.protocol + '://' + req.host + ':3000' + req.url;
+        console.log(requestedUrl);
 
         if (departureCity == "" || destinationCity=="" || minWaitTime < 0 || maxWaitTime < 0 || isNaN(minWaitTime) || isNaN(maxWaitTime) || maxWaitTime <= minWaitTime || departureCity == destinationCity) {
             return res.json({ error: 'Data Error' });
